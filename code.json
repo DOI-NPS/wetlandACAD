@@ -3,7 +3,7 @@
     "name": "wetlandACAD",
     "organization": "NATIONAL PARK SERVICE",
     "description": "a repository for wetlandACAD R package",
-    "version": "0.0.1",
+    "version": "0.1.8",
     "status": "ongoing development",
     "permissions": {
       "usageType": "openSource",
