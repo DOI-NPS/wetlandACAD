@@ -77,7 +77,7 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
 
   # Check that wl_path exists
   wl_pathn1 <- normalizePath(wl_path)
-  wl_pathn <- sub('(.*)[\\](.*)', "\\1", wl_pathn)
+  wl_pathn <- sub('(.*)[\\](.*)', "\\1", wl_pathn1)
   
   # Read in wl data and add tryCatch if not found
   wl_data <- tryCatch(read.csv(wl_path),
@@ -271,7 +271,7 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
   final_tables <- list(view_well_visits, view_wl_data)
 
   final_tables <- setNames(final_tables,
-                           c("view_well_visits", "view_water_level_data"))
+                           c("well_visit_data", "water_level_data"))
 
   list2env(final_tables, envir = env)
 
