@@ -5,13 +5,12 @@
 \title{importWaterLevel: Imports and compiles views for wetland water level data package}
 \usage{
 importWaterLevel(
-  export_protected = FALSE,
-  type = c("DSN", "file"),
+  type = "DSN",
   odbc = "RAM_BE",
   db_path = NA,
+  wl_path = NA,
   new_env = TRUE,
   export_data = FALSE,
-  export_all = FALSE,
   export_path = NA,
   zip = FALSE
 )
@@ -28,18 +27,18 @@ If "DSN" is selected, must specify name in odbc argument.
 \item{odbc}{DSN of the database when using type = DSN. If not specified will default to "RAM_BE", which
 is the back end of the MS Access RAM database.}
 
-\item{db_path}{Quoted path of database back end file, including the name of the backend.}
+\item{db_path}{Quoted path of database back end file, including the name of the backend. Only needed
+if type = 'file'.}
+
+\item{wl_path}{Path and file name of csv containing corrected water level and precipitation data. 
+These are generated using a script each year. Data and script are stored on the NETN Z:/ drive
+under ".../Freshwater_Wetlands/ACAD_FW_Wetlands/5_Data/Wetland_Wells/Data_Analysis/"}
 
 \item{new_env}{Logical. Specifies which environment to store views in. If \code{TRUE}(Default), stores
 views in VIEWS_WL environment. If \code{FALSE}, stores views in global environment}
 
 \item{export_data}{Logical. If TRUE, writes views to disk. If FALSE (Default), views are only
 stored in specified R environment.}
-
-\item{export_all}{Logical. If TRUE, exports Accepted, Certified and Raw (winter) records. If FALSE (default),
-only exports Accepted (pre-2021 QAQCed data) and Certified (post-2020 QAQCed data) records. Accepted and Certified
-records are those that were collected during the growing season and that were QAQCed following procedures documented
-in the protocol.}
 
 \item{export_path}{Quoted path to export views to. If blank, exports to working directory.}
 
@@ -56,10 +55,16 @@ environment in your workspace, or to your global environment based on whether ne
 \examples{
 \dontrun{
 # Import tables from database in specific folder:
-importWaterLevel(type = 'file', db_path = './data/NETN_RAM_Backend.mdb')
+importWaterLevel(type = 'file', db_path = '../data/NETN_RAM_20260731.accdb',
+  wl_path = "../data/well_prec_data_2013-2025.csv")
 
-# Export zip with Accepted or Certified records only
-importWaterLevel(export_data = T, zip = T, export_all = F)
+# Import well and well visit data from default RAM_BE database
+importWaterLevel(wl_path = "../data/well_prec_data_2013-2025.csv",
+                 export_data = T, export_path = "../data/wetland_data_package/")
+                 
+#' # Import well and well visit data from default RAM_BE database, and export views as zip 
+importWaterLevel(wl_path = "../data/well_prec_data_2013-2025.csv",
+                 export_data = T, export_path = "../data/wetland_data_package/", zip = T)
 }
 
 }
