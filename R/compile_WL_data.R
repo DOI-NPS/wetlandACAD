@@ -54,16 +54,30 @@ compile_WL_data <- function(path = NULL, year = as.numeric(format(Sys.Date(), "%
                             rejected = FALSE, growing_season = TRUE,
                             export = TRUE, quietly = FALSE){
 
-
-# Import database tables
-db <- DBI::dbConnect(drv = odbc::odbc(), dsn="RAM_BE")
-if(quietly == FALSE) {cat("Importing data tables from NETN RAM database")}
-assign("well_visit", DBI::dbReadTable(db, "tbl_Well_Visit"), envir = .GlobalEnv)
-assign("well_loc", DBI::dbReadTable(db, "tbl_Well"), envir = .GlobalEnv)
-if(!exists("raw_wl")){ # object assigned in well_02_prep_well_data(), but added here in case.
-  assign("raw_wl", DBI::dbReadTable(db, "tbl_Water_Level"), envir = .GlobalEnv)
-}
-DBI::dbDisconnect(db)
+  # Bug handling before importing database tables
+  if(!requireNamespace("odbc", quietly = TRUE)){
+    stop("Package 'odbc' needed for this function to work. Please install it.", call. = FALSE)
+  }
+  
+  if(!requireNamespace("DBI", quietly = TRUE)){
+    stop("Package 'DBI' needed for this function to work. Please install it.", call. = FALSE)
+  }
+  
+  dsn_list <- odbc::odbcListDataSources()
+  
+  if(!any(dsn_list$name %in% odbc)){stop(paste0("Specified DSN: 'RAM_BE' is not a named database source." ))}
+  
+  db <- DBI::dbConnect(drv = odbc::odbc(), dsn="RAM_BE")
+  if(quietly == FALSE) {cat("Importing data tables from NETN RAM database")}
+  
+  assign("well_visit", DBI::dbReadTable(db, "tbl_Well_Visit"), envir = .GlobalEnv)
+  assign("well_loc", DBI::dbReadTable(db, "tbl_Well"), envir = .GlobalEnv)
+  
+  if(!exists("raw_wl")){ # object assigned in well_02_prep_well_data(), but added here in case.
+    assign("raw_wl", DBI::dbReadTable(db, "tbl_Water_Level"), envir = .GlobalEnv)
+  }
+  
+  DBI::dbDisconnect(db)
 
 # Preparing raw water level data
 raw_wl_yr1 <- raw_wl |>
