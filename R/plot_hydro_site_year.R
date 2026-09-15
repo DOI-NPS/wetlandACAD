@@ -31,13 +31,13 @@ plot_hydro_site_year <- function(df, yvar, site, years = 2013:as.numeric(format(
 
   df <- df |> filter(Year %in% years) |>
               filter(doy > 134 & doy < 275) |>
-              select(doy_h, yvar, Year, lag.precip) |> droplevels()
+              select(doy_h, yvar, Year, lag_precip = lag.precip) |> droplevels()
 
-  colnames(df) <- c('doy_h', 'WL', 'Year', 'lag.precip')
+  colnames(df) <- c('doy_h', 'WL', 'Year', 'lag_precip')
 
   p <- ggplot(df, aes(x = doy_h, y = WL, group = Year))+
           geom_line(col = 'black')+
-          geom_line(aes(x = doy_h, y = lag.precip*5 + minWL, group = Year), col ='blue')+
+          geom_line(aes(x = doy_h, y = lag_precip*5 + minWL, group = Year), col ='blue')+
           facet_wrap(~Year, nrow = length(unique(df$Year)))+
           geom_hline(yintercept = 0, col = 'brown')+
           theme_bw()+
