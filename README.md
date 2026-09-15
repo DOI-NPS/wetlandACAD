@@ -2,7 +2,7 @@
 This R package was developed to analyze freshwater wetland data collected in Acadia National Park by the 
 Northeast Temperate Network (NETN). 
 
-The R package can be installed using `pak::pkg_install('doi-nps/wetlandACAD')`
+The R package can be installed using `pak::pkg_install('doi-nps/wetlandACAD')`.
 
 Previous archived versions of this R package can be found at <a href="www.github.com/katemmiller/wetlandACAD">www.github.com/katemmiller/wetlandACAD</a>
 
@@ -23,8 +23,11 @@ The following functions are used to compile and analyze vegetation data collecte
 The sumVegMMI requires protected species to correctly calculate the MMI for each site. 
 <ul>
 <li>importRAM: imports database tables from the NETN RAM backend Microsoft database and compiles views of the
-data used in the wetland data package. Note that protected species by default are not imported/exported in this 
+data used in the wetland RAM data package. Note that protected species by default are not imported/exported in this 
 function and require special permissions to access.  </li>
+<li>importWaterLevel: imports well and well-visit related tables from the NETN RAM backend Microsoft database, 
+and the hourly water level and precipitation data that are compiled at the end of every growing season
+to create the views used in the wetland water level data package. </li> 
 <li>sumSpeciesList: Generates a species list for each site, and only including protected species if imported
 by the importRAM function and include_protected = T is specified in the function.</li>
 <li>sumVegMMI: Calculates the Vegetation Multimetric Indicator for each site. Note that this must be 
