@@ -246,7 +246,7 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
   # view_well_visits view complete
   
   #--- tbl_water_level
-  wl_data$timestamp <- as.POSIXct(ifelse(wl_data$hr == 0, 
+  wl_data$timestamp1 <- as.POSIXct(ifelse(wl_data$hr == 0, 
                                           paste0(wl_data$timestamp, " 00:00:00"), 
                                           wl_data$timestamp),
                                   format = "%Y-%m-%d %H:%M:%S")  
@@ -258,6 +258,7 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
   # but not easy to grab and attach to here. This follows the exact pattern in the database though.
   
   names(wl_data)[names(wl_data) == "lag.precip"] <- "lag_precip_cm"
+  wl_data$timestamp <- as.character(format(wl_data$timestamp1)) # so midnight hours aren't dropped in write to csv
   
   view_wl_data <- wl_data[,c("GroupCode", "GroupName", "UnitCode", "UnitName", "timestamp", "Date", "doy", 
                              "Year", "hr", "doy_h", "precip_cm", "lag_precip_cm", 
