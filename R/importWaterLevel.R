@@ -149,7 +149,7 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
   #---- Combine tables into views ----
   #--- tbl_wells
   tbl_Well$Launch_Year <- format(as.Date(tbl_Well$Launch_Date, format = "%Y-%m-%d"), "%Y")
-  tbl_well1 <- tbl_Well[tbl_Well$Location_ID > 1,] # number for baro logger 
+  tbl_well1 <- tbl_Well[tbl_Well$Status == "A",] # A = active 
                            
   names(tbl_well1)[names(tbl_well1) == "ID"] <- "Well_ID"
   names(tbl_well1)[names(tbl_well1) == "Easting"] <- "xCoordinate"
@@ -218,7 +218,8 @@ importWaterLevel <- function(type = 'DSN', odbc = 'RAM_BE', db_path = NA, wl_pat
   names(tbl_Well_Visit)[names(tbl_Well_Visit) == "ID"] <- "Well_Visit_ID"
   names(tbl_Well_Visit)[names(tbl_Well_Visit) == "Note"] <- "Well_Visit_Note"
   
-  tbl_Well_Visit$Water_Depth_Time <- as.POSIXct(tbl_Well_Visit$Water_Depth_Time, 
+  tbl_Well_Visit$Water_Depth_Time <- as.POSIXct(paste0(tbl_Well_Visit$Visit_Date, " ", 
+                                                       substr(as.character(tbl_Well_Visit$Water_Depth_Time), 12, 19)), 
                                                 format = "%Y-%m-%d %H:%M:%S",
                                                 tz = "America/New_York")
   
